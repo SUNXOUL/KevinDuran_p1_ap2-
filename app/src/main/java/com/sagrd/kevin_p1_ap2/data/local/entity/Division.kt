@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Division (
     @PrimaryKey
     val divisionid : Int? = null,
+    val nombre : String,
     val dividendo : Int,
     val divisor : Int,
     val cociente : Int,
