@@ -43,21 +43,33 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @Composable
 fun DivisionScreen(
     divisionViewModel: DivisionViewModel = hiltViewModel()
-){
+) {
     val divisions by divisionViewModel.Divisions.collectAsStateWithLifecycle()
 
-    Scaffold (
-        topBar = { TopAppBar(title = { Text(text = "Ap2Parcial1") }, modifier = Modifier.shadow(4.dp), actions = { IconButton(
-            onClick = { divisionViewModel.clear()}) {
-            Icon(imageVector = Icons.Outlined.CleaningServices, contentDescription ="Clear" )
-        } }) } ,
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Ap2Parcial1") },
+                modifier = Modifier.shadow(4.dp),
+                actions = {
+                    IconButton(
+                        onClick = { divisionViewModel.clear() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.CleaningServices,
+                            contentDescription = "Clear"
+                        )
+                    }
+                })
+        },
         content = ({
             Spacer(modifier = Modifier.padding(top = 80.dp))
-            Column(modifier= Modifier
-                .fillMaxSize()
-                .padding(8.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            )
             {
-                Column(modifier=Modifier.padding(8.dp))
+                Column(modifier = Modifier.padding(8.dp))
                 {
                     //Nombres
                     Column {
@@ -74,130 +86,141 @@ fun DivisionScreen(
                                     keyboardType = KeyboardType.Number
                                 ),
                                 onValueChange = { divisionViewModel.onNombreChange(it) })
-                            if (divisionViewModel.nombreError){
+                            if (divisionViewModel.nombreError) {
                                 Text(text = "Nombre es Requerido")
                             }
                         }
                     }
                     Spacer(modifier = Modifier.padding(top = 8.dp))
-                        // Divisor y Dividendo
+                    // Divisor y Dividendo
                     Row {
-                        Column(modifier=Modifier.weight(1f)){
+                        Column(modifier = Modifier.weight(1f)) {
                             OutlinedTextField(
-                                    value = divisionViewModel.dividendo,
-                                    label = { Text(text = "Dividendo") },
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    singleLine = true,
-                                    maxLines = 1,
-                                    isError = divisionViewModel.dividendoError,
-                                    keyboardOptions = KeyboardOptions.Default.copy(
-                                        imeAction = ImeAction.Next,
-                                        keyboardType = KeyboardType.Number
-                                    ),
-                                    onValueChange = { divisionViewModel.onDividendoChange(it) })
-                            if (divisionViewModel.dividendo.isNullOrBlank()){
+                                value = divisionViewModel.dividendo,
+                                label = { Text(text = "Dividendo") },
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                singleLine = true,
+                                maxLines = 1,
+                                isError = divisionViewModel.dividendoError,
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Next,
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                onValueChange = { divisionViewModel.onDividendoChange(it) })
+                            if (divisionViewModel.dividendo.isNullOrBlank()) {
                                 Text(text = "Dividendo es Requerido")
                             }
-                            if (divisionViewModel.dividendoError){
+                            if (divisionViewModel.dividendoError) {
                                 Text(text = "Dividendo es Incorrecto")
                             }
-                            }
+                        }
                         Spacer(modifier = Modifier.padding(start = 8.dp))
-                        Column(modifier=Modifier.weight(1f))
-                            {
-                                OutlinedTextField(
-                                    value = divisionViewModel.divisor,
-                                    label = { Text(text = "Divisor") },
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    singleLine = true,
-                                    maxLines = 1,
-                                    isError = divisionViewModel.divisorError,
-                                    keyboardOptions = KeyboardOptions.Default.copy(
-                                        imeAction = ImeAction.Next,
-                                        keyboardType = KeyboardType.Number
-                                    ),
-                                    onValueChange = { divisionViewModel.onDivisorChange(it) })
-                                if (divisionViewModel.divisor.isNullOrBlank()){
-                                    Text(text = "Divisor es Requerido")
-                                }
-                                if (divisionViewModel.divisorError){
-                                    Text(text = "Divisor es Incorrecto")
-                                }
+                        Column(modifier = Modifier.weight(1f))
+                        {
+                            OutlinedTextField(
+                                value = divisionViewModel.divisor,
+                                label = { Text(text = "Divisor") },
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                singleLine = true,
+                                maxLines = 1,
+                                isError = divisionViewModel.divisorError,
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Next,
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                onValueChange = { divisionViewModel.onDivisorChange(it) })
+                            if (divisionViewModel.divisor.isNullOrBlank()) {
+                                Text(text = "Divisor es Requerido")
                             }
+                            if (divisionViewModel.divisorError) {
+                                Text(text = "Divisor es Incorrecto")
+                            }
+                        }
                     }
-                        Spacer(modifier = Modifier.padding(top = 8.dp))
-                        // Cociente y Residuo
-                        Row(modifier = Modifier.fillMaxWidth())
-                        {
-                            Column(modifier=Modifier.weight(1f)){
-                                OutlinedTextField(
-                                    value = divisionViewModel.cociente,
-                                    label = { Text(text = "Cociente") },
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    singleLine = true,
-                                    maxLines = 1,
-                                    isError = divisionViewModel.cocienteError,
-                                    keyboardOptions = KeyboardOptions.Default.copy(
-                                        imeAction = ImeAction.Next,
-                                        keyboardType = KeyboardType.Number
-                                    ),
-                                    onValueChange = { divisionViewModel.onCocienteChange(it) })
-                                if (divisionViewModel.cociente.isNullOrBlank()){
-                                    Text(text = "Cociente es Requerido")
-                                }
-                                if (divisionViewModel.cocienteError){
-                                    Text(text = "Cociente es Incorrecto")
-                                }
+                    Spacer(modifier = Modifier.padding(top = 8.dp))
+                    // Cociente y Residuo
+                    Row(modifier = Modifier.fillMaxWidth())
+                    {
+                        Column(modifier = Modifier.weight(1f)) {
+                            OutlinedTextField(
+                                value = divisionViewModel.cociente,
+                                label = { Text(text = "Cociente") },
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                singleLine = true,
+                                maxLines = 1,
+                                isError = divisionViewModel.cocienteError,
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Next,
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                onValueChange = { divisionViewModel.onCocienteChange(it) })
+                            if (divisionViewModel.cociente.isNullOrBlank()) {
+                                Text(text = "Cociente es Requerido")
                             }
-                            Spacer(modifier = Modifier.padding(start = 8.dp))
-                            Column(modifier=Modifier.weight(1f)){
-                                OutlinedTextField(
-                                    value = divisionViewModel.residuo,
-                                    label = { Text(text = "Residuo") },
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    singleLine = true,
-                                    maxLines = 1,
-                                    isError = divisionViewModel.residuoError,
-                                    keyboardOptions = KeyboardOptions.Default.copy(
-                                        imeAction = ImeAction.Done,
-                                        keyboardType = KeyboardType.Number
-                                    ),
-                                    keyboardActions = KeyboardActions(onDone = { divisionViewModel.AutoComplete() }),
-                                    onValueChange = { divisionViewModel.onResiduoChange(it) })
-                                if (divisionViewModel.residuo.isNullOrBlank()){
-                                    Text(text = "Residuo es Requerido")
-                                }
-                                if (divisionViewModel.residuoError){
-                                    Text(text = "Residuo es Incorrecto")
-                                }
+                            if (divisionViewModel.cocienteError) {
+                                Text(text = "Cociente es Incorrecto")
                             }
                         }
                         Spacer(modifier = Modifier.padding(start = 8.dp))
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center)
-                        {
-                            OutlinedButton(onClick = { divisionViewModel.save()})
-                            {
-                                Row {
-                                    Icon(imageVector = Icons.Outlined.Save, contentDescription ="Guardar" )
-                                    Spacer(modifier = Modifier.padding(start = 4.dp))
-                                    Text(text = "GUARDAR")
-                                }
-
+                        Column(modifier = Modifier.weight(1f)) {
+                            OutlinedTextField(
+                                value = divisionViewModel.residuo,
+                                label = { Text(text = "Residuo") },
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                singleLine = true,
+                                maxLines = 1,
+                                isError = divisionViewModel.residuoError,
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Done,
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                keyboardActions = KeyboardActions(onDone = { divisionViewModel.AutoComplete() }),
+                                onValueChange = { divisionViewModel.onResiduoChange(it) })
+                            if (divisionViewModel.residuo.isNullOrBlank()) {
+                                Text(text = "Residuo es Requerido")
+                            }
+                            if (divisionViewModel.residuoError) {
+                                Text(text = "Residuo es Incorrecto")
                             }
                         }
+                    }
+                    Spacer(modifier = Modifier.padding(start = 8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    )
+                    {
+                        OutlinedButton(onClick = { divisionViewModel.save() })
+                        {
+                            Row {
+                                Icon(
+                                    imageVector = Icons.Outlined.Save,
+                                    contentDescription = "Guardar"
+                                )
+                                Spacer(modifier = Modifier.padding(start = 4.dp))
+                                Text(text = "GUARDAR")
+                            }
+
+                        }
+                    }
 
                     Spacer(modifier = Modifier.padding(top = 12.dp))
                     Row {
                         Text(text = "Historial de resultados")
-                        Icon(imageVector = Icons.Outlined.AccessTime, contentDescription ="History" )
+                        Icon(
+                            imageVector = Icons.Outlined.AccessTime,
+                            contentDescription = "History"
+                        )
                     }
-                    LazyColumn(modifier= Modifier
-                        .fillMaxWidth()
-                        .weight(1f)) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
                         items(divisions)
                         { division ->
                             OutlinedCard(
@@ -235,6 +258,9 @@ fun DivisionScreen(
 
                         }
                     }
-                })
+                }
+
+            }
+        })
     )
 }
