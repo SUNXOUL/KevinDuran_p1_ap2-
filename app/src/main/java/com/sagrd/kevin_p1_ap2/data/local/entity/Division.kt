@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Divisiones")
 data class Division (
     @PrimaryKey
-    val divisionid : Int? = null,
+    val divisionId : Int? = null,
     val nombre : String,
     val dividendo : Int,
     val divisor : Int,
