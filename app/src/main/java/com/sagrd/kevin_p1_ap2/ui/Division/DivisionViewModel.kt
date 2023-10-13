@@ -20,10 +20,10 @@ class DivisionViewModel @Inject constructor(
     private val divisionrepository: DivisionRepository
 ) : ViewModel() {
     var nombre by mutableStateOf("")
-    var dividendo by mutableStateOf("0")
-    var divisor by mutableStateOf("0")
-    var cociente by mutableStateOf("0")
-    var residuo by mutableStateOf("0")
+    var dividendo by mutableStateOf("")
+    var divisor by mutableStateOf("")
+    var cociente by mutableStateOf("")
+    var residuo by mutableStateOf("")
 
     var nombreError by mutableStateOf(true)
     var dividendoError by mutableStateOf(true)
@@ -39,7 +39,10 @@ class DivisionViewModel @Inject constructor(
         )
     fun String.isInt(): Boolean{
         try {
-            this.toInt()
+            if (this.isEmpty()){
+                return false
+            }
+            val prueba = this.toInt()
             return true
         }
         catch (e: Exception){
@@ -77,36 +80,37 @@ class DivisionViewModel @Inject constructor(
         checkValues()
     }
     fun checkResiduo(){
-        if (!dividendo.isZero() && !divisor.isZero() && cociente.isInt() && residuo.isInt()) {
+        if (!dividendo.isZero() && !divisor.isZero() && cociente.isInt() && residuo.isInt() && divisor.isInt() && dividendo.isInt()) {
             residuoError = (residuo.toInt() != (dividendo.toInt() % divisor.toInt()))
         }
     }
     fun checkCociente(){
-        if (!dividendo.isZero() && !divisor.isZero() && cociente.isInt() && residuo.isInt()){
+        if (!dividendo.isZero() && !divisor.isZero() && cociente.isInt() && residuo.isInt() && divisor.isInt() && dividendo.isInt()){
             cocienteError= (cociente.toInt() != (dividendo.toInt()/divisor.toInt()))
         }
     }
     fun checkDivisor(){
-        if (dividendo.isInt() && divisor.isInt() && !cociente.isZero() && residuo.isInt()) {
+        if (dividendo.isInt() && divisor.isInt() && !cociente.isZero() && cociente.isInt() && residuo.isInt()) {
             divisorError = (divisor.toInt() != ((dividendo.toInt() - residuo.toInt()) / cociente.toInt()))
         }
+        divisorError=divisor.isInt()
     }
     fun checkDividendo(){
-        if (dividendo.isInt() && !divisor.isZero() && !cociente.isZero() && residuo.isInt()) {
+        if (dividendo.isInt() && !divisor.isZero() && !cociente.isZero() && divisor.isInt() && cociente.isInt()&& residuo.isInt()) {
             dividendoError = (dividendo.toInt() != ((divisor.toInt() * cociente.toInt()) + residuo.toInt()))
         }
     }
     fun autoComplete(){
-        if (cociente.toInt()==0){
+        if (!cociente.isInt()){
            onCocienteChange("${(dividendo.toInt()/divisor.toInt())}")
         }
-        if (residuo.toInt()==0){
+        if (!cociente.isInt()){
             onResiduoChange("${(dividendo.toInt() % divisor.toInt())}")
         }
-        if (dividendo.toInt()==0){
+        if (!cociente.isInt()){
             onDividendoChange("${((divisor.toInt() * cociente.toInt() ) + residuo.toInt())}")
         }
-        if (divisor.toInt()==0) {
+        if (!cociente.isInt()) {
             onDivisorChange("${((dividendo.toInt() - residuo.toInt()) / cociente.toInt())}")
         }
         checkValues()
@@ -117,7 +121,6 @@ class DivisionViewModel @Inject constructor(
         checkDivisor()
         checkCociente()
         checkDividendo()
-
     }
 
     fun validsafe() : Boolean{
@@ -131,11 +134,11 @@ class DivisionViewModel @Inject constructor(
     }
 
     fun clear(){
-        onNombreChange(" ")
-        onDivisorChange("0")
-        onDividendoChange("0")
-        onCocienteChange("0")
-        onResiduoChange("0")
+        onNombreChange("")
+        onDivisorChange("")
+        onDividendoChange("")
+        onCocienteChange("")
+        onResiduoChange("")
         checkValues()
 
     }
@@ -150,8 +153,10 @@ class DivisionViewModel @Inject constructor(
                     cociente = cociente.toInt(),
                     residuo = residuo.toInt()
                 ))
+                clear()
+                checkValues()
             }
-            clear()
+
         }
     }
 
