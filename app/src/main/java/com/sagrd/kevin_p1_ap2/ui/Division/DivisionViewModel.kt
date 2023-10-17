@@ -116,16 +116,16 @@ class DivisionViewModel @Inject constructor(
         }
     }
     fun autoComplete(){
-        if (!cociente.isInt()){
+        if (cociente.isNullOrBlank() and dividendo.isInt() and divisor.isInt()){
            onCocienteChange("${(dividendo.toInt()/divisor.toInt())}")
         }
-        if (!residuo.isInt()){
+        if (residuo.isNullOrBlank() and dividendo.isInt() and divisor.isInt()){
             onResiduoChange("${(dividendo.toInt() % divisor.toInt())}")
         }
-        if (!dividendo.isInt()){
+        if (dividendo.isNullOrEmpty() and divisor.isInt() and cociente.isInt() and residuo.isInt()){
             onDividendoChange("${((divisor.toInt() * cociente.toInt() ) + residuo.toInt())}")
         }
-        if (!divisor.isInt()) {
+        if (divisor.isNullOrEmpty() and dividendo.isInt() and cociente.isInt() and residuo.isInt()) {
             onDivisorChange("${((dividendo.toInt() - residuo.toInt()) / cociente.toInt())}")
         }
         checkValues()
