@@ -29,7 +29,7 @@ class DivisionViewModel @Inject constructor(
     var dividendoError by mutableStateOf(true)
     var divisorError by mutableStateOf(true)
     var cocienteError by mutableStateOf(true)
-    var residuoError by mutableStateOf(false)
+    var residuoError by mutableStateOf(true)
 
     val Divisions : StateFlow<List<Division>> = divisionrepository.getAll()
         .stateIn(
@@ -83,34 +83,49 @@ class DivisionViewModel @Inject constructor(
         if (!dividendo.isZero() && !divisor.isZero() && cociente.isInt() && residuo.isInt() && divisor.isInt() && dividendo.isInt()) {
             residuoError = (residuo.toInt() != (dividendo.toInt() % divisor.toInt()))
         }
+        else
+        {
+            residuoError=true
+        }
     }
     fun checkCociente(){
         if (!dividendo.isZero() && !divisor.isZero() && cociente.isInt() && residuo.isInt() && divisor.isInt() && dividendo.isInt()){
             cocienteError= (cociente.toInt() != (dividendo.toInt()/divisor.toInt()))
+        }
+        else
+        {
+            cocienteError=true
         }
     }
     fun checkDivisor(){
         if (dividendo.isInt() && divisor.isInt() && !cociente.isZero() && cociente.isInt() && residuo.isInt()) {
             divisorError = (divisor.toInt() != ((dividendo.toInt() - residuo.toInt()) / cociente.toInt()))
         }
-        divisorError=divisor.isInt()
+        else
+        {
+            divisorError=true
+        }
     }
     fun checkDividendo(){
         if (dividendo.isInt() && !divisor.isZero() && !cociente.isZero() && divisor.isInt() && cociente.isInt()&& residuo.isInt()) {
             dividendoError = (dividendo.toInt() != ((divisor.toInt() * cociente.toInt()) + residuo.toInt()))
+        }
+        else
+        {
+            dividendoError=true
         }
     }
     fun autoComplete(){
         if (!cociente.isInt()){
            onCocienteChange("${(dividendo.toInt()/divisor.toInt())}")
         }
-        if (!cociente.isInt()){
+        if (!residuo.isInt()){
             onResiduoChange("${(dividendo.toInt() % divisor.toInt())}")
         }
-        if (!cociente.isInt()){
+        if (!dividendo.isInt()){
             onDividendoChange("${((divisor.toInt() * cociente.toInt() ) + residuo.toInt())}")
         }
-        if (!cociente.isInt()) {
+        if (!divisor.isInt()) {
             onDivisorChange("${((dividendo.toInt() - residuo.toInt()) / cociente.toInt())}")
         }
         checkValues()
