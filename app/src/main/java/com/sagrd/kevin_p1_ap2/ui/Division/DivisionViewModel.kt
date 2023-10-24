@@ -9,8 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.sagrd.kevin_p1_ap2.data.local.entity.Division
 import com.sagrd.kevin_p1_ap2.data.repository.DivisionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,6 +32,16 @@ class DivisionViewModel @Inject constructor(
     var divisorError by mutableStateOf(true)
     var cocienteError by mutableStateOf(true)
     var residuoError by mutableStateOf(true)
+
+    private val _isMessageShown = MutableSharedFlow<Boolean>()
+    val isMessageShownFlow = _isMessageShown.asSharedFlow()
+
+    fun setMessageShown() {
+        viewModelScope.launch {
+            _isMessageShown.emit(true)
+        }
+    }
+
 
     val Divisions : StateFlow<List<Division>> = divisionrepository.getAll()
         .stateIn(

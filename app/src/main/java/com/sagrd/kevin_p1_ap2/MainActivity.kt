@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.sagrd.kevin_p1_ap2.ui.Division.DivisionScreen
 import com.sagrd.kevin_p1_ap2.ui.theme.Kevin_p1_ap2Theme
+import com.sagrd.kevin_p1_ap2.util.nav.AppNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,25 +26,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DivisionScreen()
+                    AppNavigation(this)
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Kevin_p1_ap2Theme {
-        Greeting("Android")
-    }
-}

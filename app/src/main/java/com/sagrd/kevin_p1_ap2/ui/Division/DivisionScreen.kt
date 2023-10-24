@@ -1,5 +1,6 @@
 package com.sagrd.kevin_p1_ap2.ui.Division
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.CleaningServices
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Save
@@ -24,38 +26,75 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import com.sagrd.kevin_p1_ap2.util.nav.AppScreens
+import kotlinx.coroutines.flow.collectLatest
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DivisionScreen(
-    divisionViewModel: DivisionViewModel = hiltViewModel()
+    divisionViewModel: DivisionViewModel = hiltViewModel(),
+    navController : NavController,
+    context: Context
 ) {
     val divisions by divisionViewModel.Divisions.collectAsStateWithLifecycle()
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(Unit) {
+        divisionViewModel.isMessageShownFlow.collectLatest {
+            if (it) {
+                snackbarHostState.showSnackbar(
+                    message = "Division Agregada",
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(text = "Ap2Parcial1") },
                 modifier = Modifier.shadow(4.dp),
                 actions = {
                     IconButton(
+                        onClick = { navController.navigate(route = AppScreens.ConsultScreen.route) }) {
+                        Icon(
+                            imageVector = Icons.Outlined.AccessTime,
+                            contentDescription = "History"
+                        )
+                    }
+                    IconButton(
                         onClick = { divisionViewModel.clear() }) {
                         Icon(
                             imageVector = Icons.Outlined.CleaningServices,
                             contentDescription = "Clear"
+                        )
+                    }
+                    IconButton(
+                        onClick = { divisionViewModel.autoComplete() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.AutoAwesome,
+                            contentDescription = "AutoComplete"
                         )
                     }
                 })
@@ -86,11 +125,11 @@ fun DivisionScreen(
                                 ),
                                 onValueChange = { divisionViewModel.onNombreChange(it) })
                             if (divisionViewModel.nombreError) {
-                                Text(text = "Nombre es Requerido")
+                                Text(text = "Nombre es Requerido",color= Color.Red)
                             }
 
                         }
-                        Spacer(modifier = Modifier.padding(top = 8.dp))
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
                         // Divisor y Dividendo
                         Row {
                             Column(modifier = Modifier.weight(1f)) {
@@ -108,13 +147,13 @@ fun DivisionScreen(
                                     ),
                                     onValueChange = { divisionViewModel.onDividendoChange(it) })
                                 if (divisionViewModel.dividendo.isBlank()) {
-                                    Text(text = "Dividendo es Requerido")
+                                    Text(text = "Dividendo es Requerido",color= Color.Red)
                                 }
                                 if (divisionViewModel.dividendoError) {
-                                    Text(text = "Dividendo es Incorrecto")
+                                    Text(text = "Dividendo es Incorrecto",color= Color.Red)
                                 }
                             }
-                            Spacer(modifier = Modifier.padding(start = 8.dp))
+                            Spacer(modifier = Modifier.padding(start = 16.dp))
                             Column(modifier = Modifier.weight(1f))
                             {
                                 OutlinedTextField(
@@ -131,14 +170,14 @@ fun DivisionScreen(
                                     ),
                                     onValueChange = { divisionViewModel.onDivisorChange(it) })
                                 if (divisionViewModel.divisor =="0") {
-                                    Text(text = "No se puede dividir entre 0")
+                                    Text(text = "No se puede dividir entre 0",color= Color.Red)
                                 }
                                 if (divisionViewModel.divisorError) {
-                                    Text(text = "Divisor es Incorrecto")
+                                    Text(text = "Divisor es Incorrecto",color= Color.Red)
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.padding(top = 8.dp))
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
                         // Cociente y Residuo
                         Row(modifier = Modifier.fillMaxWidth())
                         {
@@ -157,13 +196,13 @@ fun DivisionScreen(
                                     ),
                                     onValueChange = { divisionViewModel.onCocienteChange(it) })
                                 if (divisionViewModel.cociente.isBlank()) {
-                                    Text(text = "Cociente es Requerido")
+                                    Text(text = "Cociente es Requerido",color= Color.Red)
                                 }
                                 if (divisionViewModel.cocienteError) {
-                                    Text(text = "Cociente es Incorrecto")
+                                    Text(text = "Cociente es Incorrecto",color= Color.Red)
                                 }
                             }
-                            Spacer(modifier = Modifier.padding(start = 8.dp))
+                            Spacer(modifier = Modifier.padding(start = 16.dp))
                             Column(modifier = Modifier.weight(1f)) {
                                 OutlinedTextField(
                                     value = divisionViewModel.residuo,
@@ -180,20 +219,23 @@ fun DivisionScreen(
                                     keyboardActions = KeyboardActions(onDone = { divisionViewModel.autoComplete() }),
                                     onValueChange = { divisionViewModel.onResiduoChange(it) })
                                 if (divisionViewModel.residuo.isBlank()) {
-                                    Text(text = "Residuo es Requerido")
+                                    Text(text = "Residuo es Requerido",color= Color.Red)
                                 }
                                 if (divisionViewModel.residuoError) {
-                                    Text(text = "Residuo es Incorrecto")
+                                    Text(text = "Residuo es Incorrecto",color= Color.Red)
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.padding(start = 8.dp))
+                        Spacer(modifier = Modifier.padding(top = 32.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
                         )
                         {
-                            OutlinedButton(onClick = { divisionViewModel.save() })
+                            OutlinedButton(onClick = {
+                                divisionViewModel.save()
+                                divisionViewModel.setMessageShown()
+                            })
                             {
                                 Row {
                                     Icon(
@@ -206,60 +248,7 @@ fun DivisionScreen(
 
                             }
                         }
-
                     }
-                    Spacer(modifier = Modifier.padding(top = 12.dp))
-                    Row {
-                        Text(text = "Historial de resultados")
-                        Icon(
-                            imageVector = Icons.Outlined.AccessTime,
-                            contentDescription = "History"
-                        )
-                    }
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    ) {
-                        items(divisions)
-                        { division ->
-                            OutlinedCard(
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .fillMaxWidth()
-                            )
-                            {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center
-                                )
-                                {
-                                    Text(
-                                                    text = """
-                                        NOMBRE          : ${division.nombre}
-                                        DIVIDENDO       : ${division.dividendo}
-                                        DIVISOR         : ${division.divisor}
-                                        COCIENTE        : ${division.cociente}
-                                        RESIDUO         : ${division.residuo}
-                                    """.trimIndent(), modifier = Modifier.padding(8.dp)
-                                    )
-
-                                    Spacer(modifier = Modifier.padding(start = 100.dp))
-                                    IconButton(onClick = { divisionViewModel.delete(division) }) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.Delete,
-                                            contentDescription = "Delete"
-                                        )
-                                    }
-                                }
-                                Divider()
-                            }
-
-                        }
-
-                }
-
             }
         })
     )
