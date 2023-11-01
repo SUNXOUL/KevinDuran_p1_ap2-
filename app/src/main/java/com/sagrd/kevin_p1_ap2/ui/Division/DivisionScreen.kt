@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.sagrd.kevin_p1_ap2.util.nav.AppScreens
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -53,8 +52,6 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun DivisionScreen(
     divisionViewModel: DivisionViewModel = hiltViewModel(),
-    navController : NavController,
-    context: Context
 ) {
     val divisions by divisionViewModel.Divisions.collectAsStateWithLifecycle()
 
@@ -76,13 +73,6 @@ fun DivisionScreen(
                 title = { Text(text = "Ap2Parcial1") },
                 modifier = Modifier.shadow(4.dp),
                 actions = {
-                    IconButton(
-                        onClick = { navController.navigate(route = AppScreens.ConsultScreen.route) }) {
-                        Icon(
-                            imageVector = Icons.Outlined.AccessTime,
-                            contentDescription = "History"
-                        )
-                    }
                     IconButton(
                         onClick = { divisionViewModel.clear() }) {
                         Icon(
@@ -107,8 +97,8 @@ fun DivisionScreen(
                     .padding(8.dp)
             )
             {
-                Spacer(modifier = Modifier.padding(top = 80.dp))
-                Column(modifier = Modifier.padding(8.dp))
+                Spacer(modifier = Modifier.padding(top = 60.dp))
+                Column(modifier = Modifier.padding(8.dp).weight(1f))
                 {
                         //Nombres
                         Column {
@@ -129,7 +119,7 @@ fun DivisionScreen(
                             }
 
                         }
-                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                        Spacer(modifier = Modifier.padding(top = 8.dp))
                         // Divisor y Dividendo
                         Row {
                             Column(modifier = Modifier.weight(1f)) {
@@ -153,7 +143,7 @@ fun DivisionScreen(
                                     Text(text = "Dividendo es Incorrecto",color= Color.Red)
                                 }
                             }
-                            Spacer(modifier = Modifier.padding(start = 16.dp))
+                            Spacer(modifier = Modifier.padding(start = 8.dp))
                             Column(modifier = Modifier.weight(1f))
                             {
                                 OutlinedTextField(
@@ -177,7 +167,7 @@ fun DivisionScreen(
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                        Spacer(modifier = Modifier.padding(top = 8.dp))
                         // Cociente y Residuo
                         Row(modifier = Modifier.fillMaxWidth())
                         {
@@ -202,7 +192,7 @@ fun DivisionScreen(
                                     Text(text = "Cociente es Incorrecto",color= Color.Red)
                                 }
                             }
-                            Spacer(modifier = Modifier.padding(start = 16.dp))
+                            Spacer(modifier = Modifier.padding(start = 8.dp))
                             Column(modifier = Modifier.weight(1f)) {
                                 OutlinedTextField(
                                     value = divisionViewModel.residuo,
@@ -226,7 +216,8 @@ fun DivisionScreen(
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.padding(top = 32.dp))
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                    if (divisionViewModel.validsafe()){
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
@@ -235,7 +226,9 @@ fun DivisionScreen(
                             OutlinedButton(onClick = {
                                 divisionViewModel.save()
                                 divisionViewModel.setMessageShown()
-                            })
+                            },
+                                modifier=Modifier.fillMaxWidth()
+                            )
                             {
                                 Row {
                                     Icon(
@@ -249,6 +242,11 @@ fun DivisionScreen(
                             }
                         }
                     }
+
+                }
+                Column(modifier=Modifier.weight(1f)) {
+                    ConsultDivisionScreen()
+                }
             }
         })
     )
