@@ -14,6 +14,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -77,7 +78,7 @@ modifier = Modifier
                     .fillMaxWidth()
                     .weight(3f)) {
                     Text(text = division.nombre)
-                    Divider()
+
                     Row {
                         Text(
                             text = "Dividendo : ${division.dividendo}",
@@ -108,7 +109,7 @@ modifier = Modifier
                     }
                 }
 
-                IconButton(
+                OutlinedButton(
                     onClick = {
                     divisionViewModel.delete(division)
                     divisionViewModel.setMessageShown()
@@ -117,9 +118,9 @@ modifier = Modifier
                         .fillMaxSize()
                         .weight(1f))
                 {
-                    OutlinedCard {
-                        Text(text = "X",modifier=Modifier.padding(8.dp), color = Color.Red)
-                    }
+
+                        Text(text = "X",modifier=Modifier.padding(4.dp), color = Color.Red)
+
 
                 }
             }
